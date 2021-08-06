@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+   
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>  -->
+    <script src="assets/css/highlight/highlight.min.js"></script>
+    
+
+
+
+    
+    <script>hljs.highlightAll();</script>
+
+
+  </head>
+  <body>
+    {% include navbar.html %} 
+    {{ content}}
+  </body>
+</html>

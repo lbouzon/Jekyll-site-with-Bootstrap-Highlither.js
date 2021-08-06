@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Cheat Sheet - </title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+   
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>  -->
+    <script src="assets/css/highlight/highlight.min.js"></script>
+    
+
+
+
+    
+    <script>hljs.highlightAll();</script>
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Logo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/">Home</a>
+        <a class="nav-item nav-link" href="/about.html">About</a>
+        <a class="nav-item nav-link" href="/CheatSheet.html">CheatSheet</a>
+      </div>
+    </div>
+  </nav> 
+    <p>This cheat sheet originated from the forum, credits to Laurent Poulain.
+We copied it and changed or added a few things.
+There are certainly a lot of things that can be improved! If you would like to contribute, you have two options:</p>
+
+<ul>
+  <li>
+    <p>Click the “Edit” button on this file on GitHub:
+<a href="https://github.com/lampepfl/progfun-wiki/blob/gh-pages/CheatSheet.md">https://github.com/lampepfl/progfun-wiki/blob/gh-pages/CheatSheet.md</a>
+You can submit a pull request directly from there without checking out the git repository to your local machine.</p>
+  </li>
+  <li>
+    <p>Fork the repository <a href="https://github.com/lampepfl/progfun-wiki">https://github.com/lampepfl/progfun-wiki</a> and check it out locally. To preview your changes, you need <a href="http://jekyllrb.com/">jekyll</a>. Navigate to your checkout and invoke <code class="language-plaintext highlighter-rouge">jekyll serve</code>, then open the page <a href="http://localhost:4000/CheatSheet.html">http://localhost:4000/CheatSheet.html</a>.</p>
+  </li>
+</ul>
+
+<h2 id="evaluation-rules">Evaluation Rules</h2>
+
+<ul>
+  <li>Call by value: evaluates the function arguments before calling the function</li>
+  <li>Call by name: evaluates the function first, and then evaluates the arguments if need be</li>
+</ul>
+
+<!-- code -->
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">example</span> <span class="k">=</span> <span class="mi">2</span>      <span class="c1">// evaluated when called</span>
+    <span class="k">val</span> <span class="nv">example</span> <span class="k">=</span> <span class="mi">2</span>      <span class="c1">// evaluated immediately</span>
+    <span class="k">lazy</span> <span class="k">val</span> <span class="nv">example</span> <span class="k">=</span> <span class="mi">2</span> <span class="c1">// evaluated once when needed</span>
+
+    <span class="k">def</span> <span class="nf">square</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span>    <span class="c1">// call by value</span>
+    <span class="k">def</span> <span class="nf">square</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="nc">Double</span><span class="o">)</span> <span class="c1">// call by name</span>
+    <span class="k">def</span> <span class="nf">myFct</span><span class="o">(</span><span class="n">bindings</span><span class="k">:</span> <span class="kt">Int*</span><span class="o">)</span> <span class="k">=</span>  <span class="o">...</span>  <span class="c1">// bindings is a sequence of int, containing a varying # of arguments</span>
+</code></pre></div></div>
+
+<h2 id="higher-order-functions">Higher order functions</h2>
+
+<p>These are functions that take a function as a parameter or return functions.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// sum takes a function that takes an integer and returns an integer then</span>
+    <span class="c1">// returns a function that takes two integers and returns an integer</span>
+    <span class="k">def</span> <span class="nf">sum</span><span class="o">(</span><span class="n">f</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span><span class="o">)</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span>
+      <span class="k">def</span> <span class="nf">sumf</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="o">)</span> <span class="o">+</span> <span class="nf">f</span><span class="o">(</span><span class="n">b</span><span class="o">)</span>
+      <span class="n">sumf</span>
+
+    <span class="c1">// same as above. Its type is (Int =&gt; Int) =&gt; (Int, Int) =&gt; Int</span>
+    <span class="k">def</span> <span class="nf">sum</span><span class="o">(</span><span class="n">f</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span><span class="o">)(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>  <span class="o">...</span>
+
+    <span class="c1">// Called like this</span>
+    <span class="nf">sum</span><span class="o">((</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">)</span>          <span class="c1">// Anonymous function, i.e. does not have a name</span>
+    <span class="nf">sum</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">)</span>                 <span class="c1">// Same anonymous function with type inferred</span>
+
+    <span class="k">def</span> <span class="nf">cube</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="nf">sum</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="o">)(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span> <span class="c1">// sum of 1 cubed and 10 cubed</span>
+    <span class="nf">sum</span><span class="o">(</span><span class="n">cube</span><span class="o">)(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span>           <span class="c1">// same as above</span>
+</code></pre></div></div>
+
+<h2 id="currying">Currying</h2>
+
+<p>Converting a function with multiple arguments into a function with a
+single argument that returns another function.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="c1">// uncurried version (type is (Int, Int) =&gt; Int)</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)(</span><span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="c1">// curried version (type is Int =&gt; Int =&gt; Int)</span>
+</code></pre></div></div>
+<p>To curry an existing function :</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">f2</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="n">f</span> <span class="c1">// uncurried version (type is (Int, Int) =&gt; Int)</span>
+    <span class="k">val</span> <span class="nv">f3</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="nv">f2</span><span class="o">.</span><span class="py">curried</span> <span class="c1">// transform it to a curried version (type is Int =&gt; Int =&gt; Int)</span>
+    <span class="k">val</span> <span class="nv">f4</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="nv">Function</span><span class="o">.</span><span class="py">uncurried</span><span class="o">(</span><span class="n">f3</span><span class="o">)</span> <span class="c1">// go back to the uncurried version (type is (Int, Int) =&gt; Int)</span>
+</code></pre></div></div>
+
+<h2 id="classes">Classes</h2>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">class</span> <span class="nc">MyClass</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="k">val</span> <span class="nv">y</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span>
+                          <span class="k">var</span> <span class="n">z</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span>        <span class="c1">// Defines a new type MyClass with a constructor</span>
+                                              <span class="c1">// x will not be available outside MyClass</span>
+                                              <span class="c1">// val will generate a getter for y</span>
+                                              <span class="c1">// var will generate a getter and a setter for z</span>
+      <span class="nf">require</span><span class="o">(</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"y must be positive"</span><span class="o">)</span>    <span class="c1">// precondition, triggering an IllegalArgumentException if not met</span>
+      <span class="k">def</span> <span class="nf">this</span> <span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=</span>  <span class="o">...</span>                <span class="c1">// auxiliary constructor</span>
+      <span class="k">def</span> <span class="nf">nb1</span> <span class="k">=</span> <span class="n">x</span>                             <span class="c1">// public method computed every time it is called</span>
+      <span class="k">private</span> <span class="k">def</span> <span class="nf">test</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>  <span class="o">...</span>    <span class="c1">// private method</span>
+      <span class="k">val</span> <span class="nv">nb3</span> <span class="k">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                         <span class="c1">// computed only once</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="nf">toString</span> <span class="k">=</span>                 <span class="c1">// overridden method</span>
+          <span class="n">x</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="n">end</span> <span class="nc">MyClass</span>
+
+    <span class="k">new</span> <span class="nc">MyClass</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span> <span class="c1">// creates a new object of type</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">this</code> references the current object, <code class="language-plaintext highlighter-rouge">assert(&lt;condition&gt;)</code> issues <code class="language-plaintext highlighter-rouge">AssertionError</code> if condition
+is not met. See <a href="https://www.scala-lang.org/api/current/scala/Predef$.html"><code class="language-plaintext highlighter-rouge">scala.Predef</code></a> for <code class="language-plaintext highlighter-rouge">require</code>, <code class="language-plaintext highlighter-rouge">assume</code> and <code class="language-plaintext highlighter-rouge">assert</code>.</p>
+
+<h2 id="end-markers">End markers</h2>
+
+<p>When the body of a class, object, trait, method or value becomes long, visually
+inspecting where it ends might become challenging.
+In these situations, it is possible to explicitly signal to the reader that the body
+is over using the <code class="language-plaintext highlighter-rouge">end</code> keyword with the name of the definition:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">class</span> <span class="nc">MyClass</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span>
+      <span class="c1">// body</span>
+    <span class="n">end</span> <span class="nc">MyClass</span>
+
+    <span class="k">object</span> <span class="nc">MyObject</span><span class="k">:</span>
+      <span class="c1">// body</span>
+    <span class="n">end</span> <span class="nc">MyObject</span>
+
+    <span class="k">object</span> <span class="nc">MyTrait</span><span class="k">:</span>
+      <span class="c1">// body</span>
+    <span class="n">end</span> <span class="nc">MyTrait</span>
+
+    <span class="k">def</span> <span class="nf">myMethod</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+      <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Hello $name"</span><span class="o">)</span>
+    <span class="n">end</span> <span class="n">myMethod</span>
+
+    <span class="k">val</span> <span class="nv">myVal</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>
+      <span class="mi">42</span>
+    <span class="n">end</span> <span class="n">myVal</span>
+</code></pre></div></div>
+
+<h2 id="operators">Operators</h2>
+
+<p><code class="language-plaintext highlighter-rouge">myObject myMethod 1</code> is the same as calling <code class="language-plaintext highlighter-rouge">myObject.myMethod(1)</code></p>
+
+<p>Operator (i.e. function) names can be alphanumeric, symbolic (e.g. <code class="language-plaintext highlighter-rouge">x1</code>, <code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">+?%&amp;</code>, <code class="language-plaintext highlighter-rouge">vector_++</code>, <code class="language-plaintext highlighter-rouge">counter_=</code>)</p>
+
+<p>The precedence of an operator is determined by its first character, with the following increasing order of priority:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(all letters)
+|
+^
+&amp;
+&lt; &gt;
+= !
+:
++ -
+* / %
+(all other special characters)
+</code></pre></div></div>
+
+<p>The associativity of an operator is determined by its last character: Right-associative if ending with <code class="language-plaintext highlighter-rouge">:</code>, Left-associative otherwise.</p>
+
+<p>Note that assignment operators have lowest precedence. (Read Scala Language Specification 2.9 sections 6.12.3, 6.12.4 for more info)</p>
+
+<h2 id="class-hierarchies">Class hierarchies</h2>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">abstract</span> <span class="k">class</span> <span class="nc">TopLevel</span><span class="k">:</span>     <span class="c1">// abstract class</span>
+      <span class="k">def</span> <span class="nf">method1</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span>   <span class="c1">// abstract method</span>
+      <span class="k">def</span> <span class="nf">method2</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span>  <span class="o">...</span>
+    <span class="n">end</span> <span class="nc">TopLevel</span>
+
+    <span class="k">class</span> <span class="nc">Level1</span> <span class="k">extends</span> <span class="nc">TopLevel</span><span class="k">:</span>
+      <span class="kt">def</span> <span class="kt">method1</span><span class="o">(</span><span class="kt">x:</span> <span class="kt">Int</span><span class="o">)</span><span class="kt">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">...</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="nf">method2</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// TopLevel's method2 needs to be explicitly overridden</span>
+    <span class="n">end</span> <span class="nc">Level1</span>
+
+    <span class="k">object</span> <span class="nc">MyObject</span> <span class="k">extends</span> <span class="nc">TopLevel</span><span class="k">:</span>
+      <span class="kt">...</span>  <span class="c1">// defines a singleton object. No other instance can be created</span>
+</code></pre></div></div>
+
+<p>To create a runnable application in Scala:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@main</span> <span class="k">def</span> <span class="nf">run</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=</span>
+      <span class="nf">println</span><span class="o">(</span><span class="s">"Hello world"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>or</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">object</span> <span class="nc">Hello</span> <span class="k">extends</span> <span class="nc">App</span><span class="k">:</span>
+      <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">Hello</span> <span class="kt">World</span><span class="err">"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="class-organization">Class Organization</h2>
+
+<ul>
+  <li>
+    <p>Classes and objects are organized in packages (<code class="language-plaintext highlighter-rouge">package myPackage</code>).</p>
+  </li>
+  <li>
+    <p>They can be referenced through import statements (<code class="language-plaintext highlighter-rouge">import myPackage.MyClass</code>, <code class="language-plaintext highlighter-rouge">import myPackage.*</code>,
+<code class="language-plaintext highlighter-rouge">import myPackage.{MyClass1, MyClass2}</code>, <code class="language-plaintext highlighter-rouge">import myPackage.{MyClass1 =&gt; A}</code>)</p>
+  </li>
+  <li>
+    <p>They can also be directly referenced in the code with the fully qualified name (<code class="language-plaintext highlighter-rouge">new myPackage.MyClass1</code>)</p>
+  </li>
+  <li>
+    <p>All members of packages <code class="language-plaintext highlighter-rouge">scala</code> and <code class="language-plaintext highlighter-rouge">java.lang</code> as well as all members of the object <code class="language-plaintext highlighter-rouge">scala.Predef</code> are automatically imported.</p>
+  </li>
+  <li>Traits are similar to Java interfaces, except they can have non-abstract members:
+    <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="k">trait</span> <span class="nc">Planar</span><span class="k">:</span>
+     <span class="kt">...</span>
+      <span class="kt">class</span> <span class="kt">Square</span> <span class="kt">extends</span> <span class="kt">Shape</span> <span class="kt">with</span> <span class="kt">Planar</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>General object hierarchy:</p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">scala.Any</code> base type of all types. Has methods <code class="language-plaintext highlighter-rouge">hashCode</code> and <code class="language-plaintext highlighter-rouge">toString</code> that can be overridden</li>
+      <li><code class="language-plaintext highlighter-rouge">scala.AnyVal</code> base type of all primitive types. (<code class="language-plaintext highlighter-rouge">scala.Double</code>, <code class="language-plaintext highlighter-rouge">scala.Float</code>, etc.)</li>
+      <li><code class="language-plaintext highlighter-rouge">scala.AnyRef</code> base type of all reference types. (alias of <code class="language-plaintext highlighter-rouge">java.lang.Object</code>, supertype of <code class="language-plaintext highlighter-rouge">java.lang.String</code>, <code class="language-plaintext highlighter-rouge">scala.List</code>, any user-defined class)</li>
+      <li><code class="language-plaintext highlighter-rouge">scala.Null</code> is a subtype of any <code class="language-plaintext highlighter-rouge">scala.AnyRef</code> (<code class="language-plaintext highlighter-rouge">null</code> is the only instance of type <code class="language-plaintext highlighter-rouge">Null</code>), and <code class="language-plaintext highlighter-rouge">scala.Nothing</code> is a subtype of any other type without any instance.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="type-parameters">Type Parameters</h2>
+
+<p>Conceptually similar to C++ templates or Java generics. These can apply to classes, traits or functions.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">class</span> <span class="nc">MyClass</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">arg1</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span>
+      <span class="kt">...</span>
+
+    <span class="kt">MyClass</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="mi">1</span><span class="o">)</span>
+    <span class="nc">MyClass</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>   <span class="c1">// the type is being inferred, i.e. determined based on the value arguments</span>
+</code></pre></div></div>
+
+<p>It is possible to restrict the type being used, e.g.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">myFct</span><span class="o">[</span><span class="kt">T</span> <span class="k">&lt;:</span> <span class="kt">TopLevel</span><span class="o">](</span><span class="n">arg</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// T must derive from TopLevel or be TopLevel</span>
+    <span class="k">def</span> <span class="nf">myFct</span><span class="o">[</span><span class="kt">T</span> <span class="k">&gt;:</span> <span class="kt">Level1</span><span class="o">](</span><span class="n">arg</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">...</span>   <span class="c1">// T must be a supertype of Level1</span>
+    <span class="k">def</span> <span class="nf">myFct</span><span class="o">[</span><span class="kt">T</span> <span class="k">&gt;:</span> <span class="kt">Level1</span> <span class="k">&lt;:</span> <span class="kt">TopLevel</span><span class="o">](</span><span class="n">arg</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">T</span> <span class="o">=</span> <span class="o">...</span>
+</code></pre></div></div>
+
+<h2 id="variance">Variance</h2>
+
+<p>Given <code class="language-plaintext highlighter-rouge">A &lt;: B</code></p>
+
+<p>If <code class="language-plaintext highlighter-rouge">C[A] &lt;: C[B]</code>, <code class="language-plaintext highlighter-rouge">C</code> is covariant</p>
+
+<p>If <code class="language-plaintext highlighter-rouge">C[A] &gt;: C[B]</code>, <code class="language-plaintext highlighter-rouge">C</code> is contravariant</p>
+
+<p>Otherwise C is nonvariant</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">class</span> <span class="nc">C</span><span class="o">[</span><span class="kt">+A</span><span class="o">]</span>  <span class="c1">// C is covariant</span>
+    <span class="k">class</span> <span class="nc">C</span><span class="o">[</span><span class="kt">-A</span><span class="o">]</span>  <span class="c1">// C is contravariant</span>
+    <span class="k">class</span> <span class="nc">C</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span>   <span class="c1">// C is nonvariant</span>
+</code></pre></div></div>
+
+<p>For a function, if <code class="language-plaintext highlighter-rouge">A2 &lt;: A1</code> and <code class="language-plaintext highlighter-rouge">B1 &lt;: B2</code>, then <code class="language-plaintext highlighter-rouge">A1 =&gt; B1 &lt;: A2 =&gt; B2</code>.</p>
+
+<p>Functions must be contravariant in their argument types and covariant in their result types, e.g.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">trait</span> <span class="nc">Function1</span><span class="o">[</span><span class="kt">-T</span>, <span class="kt">+U</span><span class="o">]</span><span class="nc">:</span>
+      <span class="k">def</span> <span class="nf">apply</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">U</span>
+    <span class="c1">// Variance check is OK because T is contravariant and U is covariant</span>
+
+    <span class="k">class</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">+T</span><span class="o">]</span><span class="nc">:</span>
+      <span class="k">def</span> <span class="nf">update</span><span class="o">(</span><span class="n">x</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span> <span class="c1">// variance checks fails</span>
+</code></pre></div></div>
+
+<p>Find out more about variance in
+<a href="https://class.coursera.org/progfun-2012-001/lecture/81">lecture 4.4</a>
+and <a href="https://class.coursera.org/progfun-2012-001/lecture/83">lecture 4.5</a></p>
+
+<h2 id="pattern-matching">Pattern Matching</h2>
+
+<p>Pattern matching is used for decomposing data structures:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">unknownObject</span> <span class="k">match</span>
+      <span class="k">case</span> <span class="nc">MyClass</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">...</span>
+      <span class="k">case</span> <span class="nc">MyClass2</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Here are a few example patterns</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">(</span><span class="n">someList</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">T</span><span class="o">])</span> <span class="k">match</span>
+      <span class="k">case</span> <span class="nc">Nil</span> <span class="k">=&gt;</span> <span class="o">...</span>          <span class="c1">// empty list</span>
+      <span class="k">case</span> <span class="n">x</span> <span class="o">::</span> <span class="nc">Nil</span> <span class="k">=&gt;</span> <span class="o">...</span>     <span class="c1">// list with only one element</span>
+      <span class="k">case</span> <span class="nc">List</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">...</span>      <span class="c1">// same as above</span>
+      <span class="k">case</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="k">=&gt;</span> <span class="o">...</span>      <span class="c1">// a list with at least one element. x is bound to the head,</span>
+                               <span class="c1">// xs to the tail. xs could be Nil or some other list.</span>
+      <span class="k">case</span> <span class="mi">1</span> <span class="o">::</span> <span class="mi">2</span> <span class="o">::</span> <span class="n">cs</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="c1">// lists that starts with 1 and then 2</span>
+      <span class="nf">case</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">::</span> <span class="n">ps</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="c1">// a list where the head element is a pair</span>
+      <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="o">...</span>            <span class="c1">// default case if none of the above matches</span>
+</code></pre></div></div>
+
+<p>The last example shows that every pattern consists of sub-patterns: it
+only matches lists with at least one element, where that element is a
+pair. <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code> are again patterns that could match only specific
+types.</p>
+
+<h3 id="options">Options</h3>
+
+<p>Pattern matching can also be used for <code class="language-plaintext highlighter-rouge">Option</code> values. Some
+functions (like <code class="language-plaintext highlighter-rouge">Map.get</code>) return a value of type <code class="language-plaintext highlighter-rouge">Option[T]</code> which
+is either a value of type <code class="language-plaintext highlighter-rouge">Some[T]</code> or the value <code class="language-plaintext highlighter-rouge">None</code>:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">myMap</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"a"</span> <span class="o">-&gt;</span> <span class="mi">42</span><span class="o">,</span> <span class="s">"b"</span> <span class="o">-&gt;</span> <span class="mi">43</span><span class="o">)</span>
+
+    <span class="k">def</span> <span class="nf">getMapValue</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>
+      <span class="n">myMap</span> <span class="n">get</span> <span class="n">s</span> <span class="k">match</span>
+        <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">nb</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"Value found: "</span> <span class="o">+</span> <span class="n">nb</span>
+        <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="s">"No value found"</span>
+
+    <span class="nf">getMapValue</span><span class="o">(</span><span class="s">"a"</span><span class="o">)</span>  <span class="c1">// "Value found: 42"</span>
+    <span class="nf">getMapValue</span><span class="o">(</span><span class="s">"c"</span><span class="o">)</span>  <span class="c1">// "No value found"</span>
+</code></pre></div></div>
+
+<p>Most of the times when you write a pattern match on an option value,
+the same expression can be written more concisely using combinator
+methods of the <code class="language-plaintext highlighter-rouge">Option</code> class. For example, the function <code class="language-plaintext highlighter-rouge">getMapValue</code>
+can be written as follows:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">getMapValue</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>
+      <span class="nv">myMap</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="s">"Value found: "</span> <span class="o">+</span> <span class="k">_</span><span class="o">).</span><span class="py">getOrElse</span><span class="o">(</span><span class="s">"No value found"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h3 id="pattern-matching-in-anonymous-functions">Pattern Matching in Anonymous Functions</h3>
+
+<p>Pattern matches are also used quite often in anonymous functions:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">options</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Char</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="sc">'a'</span><span class="o">)</span> <span class="o">::</span> <span class="nc">None</span> <span class="o">::</span> <span class="nc">Some</span><span class="o">(</span><span class="sc">'b'</span><span class="o">)</span> <span class="o">::</span> <span class="nc">Nil</span>
+    <span class="k">val</span> <span class="nv">chars</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Char</span><span class="o">]</span> <span class="k">=</span> <span class="nv">pairs</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">p</span> <span class="k">=&gt;</span> <span class="n">p</span> <span class="k">match</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">ch</span>
+      <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="sc">'z'</span>
+    <span class="o">})</span>
+</code></pre></div></div>
+
+<p>Instead of <code class="language-plaintext highlighter-rouge">p =&gt; p match { case ... }</code>, you can simply write <code class="language-plaintext highlighter-rouge">{case ...}</code>, so the above example becomes more concise:</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">chars</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Char</span><span class="o">]</span> <span class="k">=</span> <span class="nv">pairs</span><span class="o">.</span><span class="py">map</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">ch</span>
+      <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="sc">'z'</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="collections">Collections</h2>
+
+<p>Scala defines several collection classes:</p>
+
+<h3 id="base-classes">Base Classes</h3>
+
+<ul>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/Iterable.html"><code class="language-plaintext highlighter-rouge">Iterable</code></a> (collections you can iterate on)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/Seq.html"><code class="language-plaintext highlighter-rouge">Seq</code></a> (ordered sequences)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/Set.html"><code class="language-plaintext highlighter-rouge">Set</code></a></li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/Map.html"><code class="language-plaintext highlighter-rouge">Map</code></a> (lookup data structure)</li>
+</ul>
+
+<h3 id="immutable-collections">Immutable Collections</h3>
+
+<ul>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/List.html"><code class="language-plaintext highlighter-rouge">List</code></a> (linked list, provides fast sequential access)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Stream.html"><code class="language-plaintext highlighter-rouge">Stream</code></a> (same as List, except that the tail is evaluated only on demand)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Vector.html"><code class="language-plaintext highlighter-rouge">Vector</code></a> (array-like type, implemented as tree of blocks, provides fast random access)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Range.html"><code class="language-plaintext highlighter-rouge">Range</code></a> (ordered sequence of integers with equal spacing)</li>
+  <li><a href="http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/String.html"><code class="language-plaintext highlighter-rouge">String</code></a> (Java type, implicitly converted to a character sequence, so you can treat every string like a <code class="language-plaintext highlighter-rouge">Seq[Char]</code>)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Map.html"><code class="language-plaintext highlighter-rouge">Map</code></a> (collection that maps keys to values)</li>
+  <li><a href="https://www.scala-lang.org/api/current/scala/collection/immutable/Set.html"><code class="language-plaintext highlighter-rouge">Set</code></a> (collection without duplicate elements)</li>
+</ul>
+
+<h3 id="mutable-collections">Mutable Collections</h3>
+<p>Most of the immutable collections above have a mutable counterpart, e.g.:</p>
+
+<ul>
+  <li><a href="https://www.scala-lang.org/api/current/scala/Array.html"><code class="language-plaintext highlighter-rouge">Array</code></a> (Scala arrays are native JVM arrays at runtime, therefore they are very performant)</li>
+  <li>Scala also has mutable maps and sets; these should only be used if there are performance issues with immutable types</li>
+</ul>
+
+<h3 id="examples">Examples</h3>
+<p>NOTE: For the correct code convention of using postfix or not, read <a href="https://docs.scala-lang.org/style/method-invocation.html">this</a></p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">fruitList</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"apples"</span><span class="o">,</span> <span class="s">"oranges"</span><span class="o">,</span> <span class="s">"pears"</span><span class="o">)</span>
+    <span class="c1">// Alternative syntax for lists</span>
+    <span class="k">val</span> <span class="nv">fruit</span> <span class="k">=</span> <span class="s">"apples"</span> <span class="o">::</span> <span class="o">(</span><span class="s">"oranges"</span> <span class="o">::</span> <span class="o">(</span><span class="s">"pears"</span> <span class="o">::</span> <span class="nc">Nil</span><span class="o">))</span> <span class="c1">// parens optional, :: (pronounced cons) is right-associative</span>
+    <span class="nv">fruit</span><span class="o">.</span><span class="py">head</span>   <span class="c1">// "apples"</span>
+    <span class="nv">fruit</span><span class="o">.</span><span class="py">tail</span>   <span class="c1">// List("oranges", "pears")</span>
+    <span class="k">val</span> <span class="nv">empty</span> <span class="k">=</span> <span class="nc">List</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">empty</span> <span class="k">=</span> <span class="nc">Nil</span>
+
+    <span class="k">val</span> <span class="nv">nums</span> <span class="k">=</span> <span class="nc">Vector</span><span class="o">(</span><span class="s">"louis"</span><span class="o">,</span> <span class="s">"frank"</span><span class="o">,</span> <span class="s">"hiromi"</span><span class="o">)</span>
+    <span class="nf">nums</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>                     <span class="c1">// element at index 1, returns "frank", complexity O(log(n))</span>
+    <span class="nv">nums</span><span class="o">.</span><span class="py">updated</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"helena"</span><span class="o">)</span>   <span class="c1">// new vector with a different string at index 2, complexity O(log(n))</span>
+
+    <span class="k">val</span> <span class="nv">fruitSet</span> <span class="k">=</span> <span class="nc">Set</span><span class="o">(</span><span class="s">"apple"</span><span class="o">,</span> <span class="s">"banana"</span><span class="o">,</span> <span class="s">"pear"</span><span class="o">,</span> <span class="s">"banana"</span><span class="o">)</span>
+    <span class="nv">fruitSet</span><span class="o">.</span><span class="py">size</span>    <span class="c1">// returns 3: there are no duplicates, only one banana</span>
+
+    <span class="k">val</span> <span class="nv">r</span><span class="k">:</span> <span class="kt">Range</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span> <span class="c1">// 1, 2, 3, 4</span>
+    <span class="k">val</span> <span class="nv">s</span><span class="k">:</span> <span class="kt">Range</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span>    <span class="c1">// 1, 2, 3, 4, 5</span>
+    <span class="mi">1</span> <span class="n">to</span> <span class="mi">10</span> <span class="n">by</span> <span class="mi">3</span>  <span class="c1">// 1, 4, 7, 10</span>
+    <span class="mi">6</span> <span class="n">to</span> <span class="mi">1</span> <span class="n">by</span> <span class="o">-</span><span class="mi">2</span>  <span class="c1">// 6, 4, 2</span>
+
+    <span class="k">val</span> <span class="nv">s</span> <span class="k">=</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">6</span><span class="o">).</span><span class="py">toSet</span>
+    <span class="nv">s</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="k">_</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span> <span class="c1">// adds 2 to each element of the set</span>
+
+    <span class="k">val</span> <span class="nv">s</span> <span class="k">=</span> <span class="s">"Hello World"</span>
+    <span class="n">s</span> <span class="nf">filter</span> <span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="nv">c</span><span class="o">.</span><span class="py">isUpper</span><span class="o">)</span> <span class="c1">// returns "HW"; strings can be treated as Seq[Char]</span>
+
+    <span class="c1">// Operations on sequences</span>
+    <span class="k">val</span> <span class="nv">xs</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(...)</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">length</span>         <span class="c1">// number of elements, complexity O(n)</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">last</span>           <span class="c1">// last element (exception if xs is empty), complexity O(n)</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">init</span>           <span class="c1">// all elements of xs but the last (exception if xs is empty), complexity O(n)</span>
+    <span class="n">xs</span> <span class="n">take</span> <span class="n">n</span>         <span class="c1">// first n elements of xs</span>
+    <span class="n">xs</span> <span class="n">drop</span> <span class="n">n</span>         <span class="c1">// the rest of the collection after taking n elements</span>
+    <span class="n">xs</span> <span class="n">splitAt</span> <span class="n">n</span>      <span class="c1">// same as (xs take n, xs drop n)</span>
+    <span class="nf">xs</span><span class="o">(</span><span class="n">n</span><span class="o">)</span>             <span class="c1">// the nth element of xs, complexity O(n)</span>
+    <span class="n">xs</span> <span class="o">++</span> <span class="n">ys</span>          <span class="c1">// concatenation, complexity O(n)</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">reverse</span>        <span class="c1">// reverse the order, complexity O(n)</span>
+    <span class="n">xs</span> <span class="nf">updated</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">x</span><span class="o">)</span>  <span class="c1">// same list than xs, except at index n where it contains x, complexity O(n)</span>
+    <span class="n">xs</span> <span class="n">indexOf</span> <span class="n">x</span>      <span class="c1">// the index of the first element equal to x (-1 otherwise)</span>
+    <span class="n">xs</span> <span class="n">contains</span> <span class="n">x</span>     <span class="c1">// same as xs indexOf x &gt;= 0</span>
+    <span class="n">xs</span> <span class="n">filter</span> <span class="n">p</span>       <span class="c1">// returns a list of the elements that satisfy the predicate p</span>
+    <span class="n">xs</span> <span class="n">filterNot</span> <span class="n">p</span>    <span class="c1">// filter with negated p</span>
+    <span class="n">xs</span> <span class="n">partition</span> <span class="n">p</span>    <span class="c1">// same as (xs filter p, xs filterNot p)</span>
+    <span class="n">xs</span> <span class="n">takeWhile</span> <span class="n">p</span>    <span class="c1">// the longest prefix consisting of elements that satisfy p</span>
+    <span class="n">xs</span> <span class="n">dropWhile</span> <span class="n">p</span>    <span class="c1">// the remainder of the list after any leading element satisfying p have been removed</span>
+    <span class="n">xs</span> <span class="n">span</span> <span class="n">p</span>         <span class="c1">// same as (xs takeWhile p, xs dropWhile p)</span>
+
+    <span class="nc">List</span><span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xn</span><span class="o">)</span> <span class="n">reduceLeft</span> <span class="n">op</span>    <span class="c1">// (...(x1 op x2) op x3) op ...) op xn</span>
+    <span class="nc">List</span><span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xn</span><span class="o">).</span><span class="py">foldLeft</span><span class="o">(</span><span class="n">z</span><span class="o">)(</span><span class="n">op</span><span class="o">)</span>  <span class="c1">// (...( z op x1) op x2) op ...) op xn</span>
+    <span class="nc">List</span><span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xn</span><span class="o">)</span> <span class="n">reduceRight</span> <span class="n">op</span>   <span class="c1">// x1 op (... (x{n-1} op xn) ...)</span>
+    <span class="nc">List</span><span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xn</span><span class="o">).</span><span class="py">foldRight</span><span class="o">(</span><span class="n">z</span><span class="o">)(</span><span class="n">op</span><span class="o">)</span> <span class="c1">// x1 op (... (    xn op  z) ...)</span>
+
+    <span class="n">xs</span> <span class="n">exists</span> <span class="n">p</span>    <span class="c1">// true if there is at least one element for which predicate p is true</span>
+    <span class="n">xs</span> <span class="n">forall</span> <span class="n">p</span>    <span class="c1">// true if p(x) is true for all elements</span>
+    <span class="n">xs</span> <span class="n">zip</span> <span class="n">ys</span>      <span class="c1">// returns a list of pairs which groups elements with same index together</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">unzip</span>       <span class="c1">// opposite of zip: returns a pair of two lists</span>
+    <span class="n">xs</span> <span class="n">flatMap</span> <span class="n">f</span>   <span class="c1">// applies the function to all elements and concatenates the result</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">sum</span>         <span class="c1">// sum of elements of the numeric collection</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">product</span>     <span class="c1">// product of elements of the numeric collection</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">max</span>         <span class="c1">// maximum of collection</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">min</span>         <span class="c1">// minimum of collection</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">flatten</span>     <span class="c1">// flattens a collection of collection into a single-level collection</span>
+    <span class="n">xs</span> <span class="n">groupBy</span> <span class="n">f</span>   <span class="c1">// returns a map which points to a list of elements</span>
+    <span class="nv">xs</span><span class="o">.</span><span class="py">distinct</span>    <span class="c1">// sequence of distinct entries (removes duplicates)</span>
+
+    <span class="n">x</span> <span class="o">+:</span> <span class="n">xs</span>  <span class="c1">// creates a new collection with leading element x</span>
+    <span class="n">xs</span> <span class="o">:+</span> <span class="n">x</span>  <span class="c1">// creates a new collection with trailing element x</span>
+
+    <span class="c1">// Operations on maps</span>
+    <span class="k">val</span> <span class="nv">myMap</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"I"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">,</span> <span class="s">"V"</span> <span class="o">-&gt;</span> <span class="mi">5</span><span class="o">,</span> <span class="s">"X"</span> <span class="o">-&gt;</span> <span class="mi">10</span><span class="o">)</span>  <span class="c1">// create a map</span>
+    <span class="nf">myMap</span><span class="o">(</span><span class="s">"I"</span><span class="o">)</span>      <span class="c1">// =&gt; 1</span>
+    <span class="nf">myMap</span><span class="o">(</span><span class="s">"A"</span><span class="o">)</span>      <span class="c1">// =&gt; java.util.NoSuchElementException</span>
+    <span class="n">myMap</span> <span class="n">get</span> <span class="s">"A"</span>   <span class="c1">// =&gt; None</span>
+    <span class="n">myMap</span> <span class="n">get</span> <span class="s">"I"</span>   <span class="c1">// =&gt; Some(1)</span>
+    <span class="nv">myMap</span><span class="o">.</span><span class="py">updated</span><span class="o">(</span><span class="s">"V"</span><span class="o">,</span> <span class="mi">15</span><span class="o">)</span>  <span class="c1">// returns a new map where "V" maps to 15 (entry is updated)</span>
+                            <span class="c1">// if the key ("V" here) does not exist, a new entry is added</span>
+
+    <span class="c1">// Operations on LazyLists</span>
+    <span class="k">val</span> <span class="nv">xs</span> <span class="k">=</span> <span class="nc">LazyList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">xs</span> <span class="k">=</span> <span class="nv">LazyList</span><span class="o">.</span><span class="py">cons</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nv">LazyList</span><span class="o">.</span><span class="py">cons</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="nv">LazyList</span><span class="o">.</span><span class="py">cons</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="nv">LazyList</span><span class="o">.</span><span class="py">empty</span><span class="o">)))</span> <span class="c1">// same as above</span>
+    <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">1000</span><span class="o">).</span><span class="py">to</span><span class="o">[</span><span class="kt">LazyList</span><span class="o">]</span> <span class="c1">// =&gt; Stream(1, ?)</span>
+    <span class="n">x</span> <span class="o">#::</span> <span class="n">xs</span> <span class="c1">// Same as LazyList.cons(x, xs)</span>
+             <span class="c1">// In the LazyList's cons operator, the second parameter (the tail)</span>
+             <span class="c1">// is defined as a "call by name" parameter.</span>
+             <span class="c1">// Note that x::xs always produces a List</span>
+    <span class="k">def</span> <span class="nf">integers</span><span class="o">(</span><span class="n">start</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span><span class="k">:</span> <span class="kt">LazyList</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">start</span> <span class="o">#::</span> <span class="nf">integers</span><span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="c1">// infinite sequence of integers starting at "start"</span>
+    <span class="nf">integers</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="n">drop</span> <span class="mi">10</span> <span class="n">take</span> <span class="mi">100</span> <span class="c1">// New lazylist starting at 10</span>
+</code></pre></div></div>
+
+<h2 id="pairs-similar-for-larger-tuples">Pairs (similar for larger Tuples)</h2>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">val</span> <span class="nv">pair</span> <span class="k">=</span> <span class="o">(</span><span class="s">"answer"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>   <span class="c1">// type: (String, Int)</span>
+    <span class="nf">val</span> <span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=</span> <span class="n">pair</span>   <span class="c1">// label = "answer", value = 42</span>
+    <span class="nf">pair</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="c1">// "answer"</span>
+    <span class="nf">pair</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="c1">// 42</span>
+</code></pre></div></div>
+
+<h2 id="ordering">Ordering</h2>
+
+<p>There is already a class in the standard library that represents orderings: <code class="language-plaintext highlighter-rouge">scala.math.Ordering[T]</code> which contains
+comparison functions such as <code class="language-plaintext highlighter-rouge">lt()</code> and <code class="language-plaintext highlighter-rouge">gt()</code> for standard types. Types with a single natural ordering should inherit from
+the trait <code class="language-plaintext highlighter-rouge">scala.math.Ordered[T]</code>.</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">import</span> <span class="nn">math.Ordering</span>
+
+    <span class="k">def</span> <span class="nf">msort</span><span class="o">[</span><span class="kt">T</span><span class="o">](</span><span class="n">xs</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">T</span><span class="o">])(</span><span class="n">using</span> <span class="nc">Ordering</span><span class="o">[</span><span class="kt">T</span><span class="o">])</span> <span class="k">=</span> <span class="o">...</span>
+    <span class="nf">msort</span><span class="o">(</span><span class="n">fruits</span><span class="o">)(</span><span class="n">using</span> <span class="nv">Ordering</span><span class="o">.</span><span class="py">String</span><span class="o">)</span>
+    <span class="nf">msort</span><span class="o">(</span><span class="n">fruits</span><span class="o">)</span>  <span class="c1">// the compiler figures out the right ordering</span>
+</code></pre></div></div>
+
+<h2 id="for-comprehensions">For-Comprehensions</h2>
+
+<p>A for-comprehension is syntactic sugar for <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">flatMap</code> and <code class="language-plaintext highlighter-rouge">filter</code> operations on collections.</p>
+
+<p>The general form is <code class="language-plaintext highlighter-rouge">for (s) yield e</code></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">s</code> is a sequence of generators and filters</li>
+  <li><code class="language-plaintext highlighter-rouge">p &lt;- e</code> is a generator</li>
+  <li><code class="language-plaintext highlighter-rouge">if f</code> is a filter</li>
+  <li>If there are several generators (equivalent of a nested loop), the last generator varies faster than the first</li>
+  <li>You can use <code class="language-plaintext highlighter-rouge">{ s }</code> instead of <code class="language-plaintext highlighter-rouge">( s )</code> if you want to use multiple lines without requiring semicolons</li>
+  <li><code class="language-plaintext highlighter-rouge">e</code> is an element of the resulting collection</li>
+</ul>
+
+<h3 id="example-1">Example 1</h3>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// list all combinations of numbers x and y where x is drawn from</span>
+    <span class="c1">// 1 to M and y is drawn from 1 to N</span>
+    <span class="nf">for</span> <span class="o">(</span><span class="n">x</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">M</span><span class="o">;</span> <span class="n">y</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">N</span><span class="o">)</span>
+      <span class="nf">yield</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>is equivalent to</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="n">M</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="n">x</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="n">N</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="n">y</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)))</span>
+</code></pre></div></div>
+
+<h3 id="translation-rules">Translation Rules</h3>
+
+<p>A for-expression looks like a traditional for loop but works differently internally</p>
+
+<p><code class="language-plaintext highlighter-rouge">for (x &lt;- e1) yield e2</code> is translated to <code class="language-plaintext highlighter-rouge">e1.map(x =&gt; e2)</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">for (x &lt;- e1 if f; s) yield e2</code> is translated to <code class="language-plaintext highlighter-rouge">for (x &lt;- e1.withFilter(x =&gt; f); s) yield e2</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">for (x &lt;- e1; y &lt;- e2; s) yield e3</code> is translated to <code class="language-plaintext highlighter-rouge">e1.flatMap(x =&gt; for (y &lt;- e2; s) yield e3)</code></p>
+
+<p>Note: s is a (potentially empty) sequence of fields (generators and filters)</p>
+
+<p>This means you can use a for-comprehension for your own type, as long
+as you define <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">flatMap</code> and <code class="language-plaintext highlighter-rouge">filter</code>.</p>
+
+<p>For more, see <a href="https://class.coursera.org/progfun-2012-001/lecture/111">lecture 6.5</a>.</p>
+
+<h3 id="example-2">Example 2</h3>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span>
+      <span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="n">n</span>
+      <span class="n">j</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="n">i</span>
+      <span class="k">if</span> <span class="nf">isPrime</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="o">)</span>
+    <span class="nf">yield</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>is equivalent to</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nf">for</span> <span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="n">i</span> <span class="k">if</span> <span class="nf">isPrime</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="o">))</span>
+        <span class="nf">yield</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>is equivalent to</p>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">(</span><span class="mi">1</span> <span class="n">until</span> <span class="n">n</span><span class="o">).</span><span class="py">flatMap</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="mi">1</span> <span class="n">until</span> <span class="n">i</span><span class="o">).</span><span class="py">filter</span><span class="o">(</span><span class="n">j</span> <span class="k">=&gt;</span> <span class="nf">isPrime</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="o">)).</span><span class="py">map</span><span class="o">(</span><span class="n">j</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">)))</span>
+</code></pre></div></div>
+
+  </body>
+</html>

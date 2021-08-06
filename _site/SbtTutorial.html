@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Sbt Tutorial - </title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+   
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>  -->
+    <script src="assets/css/highlight/highlight.min.js"></script>
+    
+
+
+
+    
+    <script>hljs.highlightAll();</script>
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Logo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="/">Home</a>
+        <a class="nav-item nav-link" href="/about.html">About</a>
+        <a class="nav-item nav-link" href="/CheatSheet.html">CheatSheet</a>
+      </div>
+    </div>
+  </nav> 
+    <p>We use sbt for building, testing, running and submitting assignments. This tutorial explains all sbt commands that you will use during our class. The <a href="view?page=ToolsSetup">Tools Setup</a> page explains how to install sbt.</p>
+
+<h2 id="starting-up-sbt">Starting up sbt</h2>
+
+<p>In order to start sbt, open a terminal (“Command Prompt” in Windows) and navigate to the directory of the assignment you are working on. Typing <code class="language-plaintext highlighter-rouge">sbt</code> will open the sbt command prompt.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>shell$ cd /path/to/progfun-project-directory                        # This is the shell of the operating system
+shell$ sbt
+&gt; _                                                                 # This is the sbt shell
+</code></pre></div></div>
+
+<h2 id="running-the-scala-interpreter">Running the Scala Interpreter</h2>
+
+<p>You can start the Scala interpreter inside sbt using the <code class="language-plaintext highlighter-rouge">console</code> task. The interpreter (also called REPL, for “read-eval-print loop”) is useful for trying out snippets of Scala code. Note that the interpreter can only be started if there are no compilation errors in your code.</p>
+
+<p>In order to quit the interpreter and get back to sbt, type <code class="language-plaintext highlighter-rouge">ctrl-d</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; console
+[info] Starting scala interpreter...
+Welcome to Scala version 2.10.1 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0_04-ea).
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala&gt; println("Oh, hai!")                                          # This is the Scala REPL, type some Scala code
+Oh, hai!
+
+scala&gt; val l = List(1, 2, 3)
+l: List[Int] = List(1, 2, 3)
+
+scala&gt; val squares = l.map(x =&gt; x * x)
+squares: List[Int] = List(1, 4, 9)
+
+scala&gt;                                                              # Type [ctrl-d] to exit the Scala REPL
+[success] Total time: 20 s, completed Mar 21, 2013 11:02:31 AM
+&gt;                                                                   # We're back to the sbt shell
+</code></pre></div></div>
+
+<h2 id="compiling-your-code">Compiling your Code</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">compile</code> task will compile the source code of the assignment which is located in the directory <code class="language-plaintext highlighter-rouge">src/main/scala</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; compile
+[info] Compiling 4 Scala sources to /Users/aleksandar/example/target/scala-2.10.1/classes...
+[success] Total time: 1 s, completed Mar 21, 2013 11:04:46 PM
+&gt; 
+</code></pre></div></div>
+
+<p>If the source code contains errors, the error messages from the compiler will be displayed.</p>
+
+<h2 id="testing-your-code">Testing your Code</h2>
+
+<p>The directory <code class="language-plaintext highlighter-rouge">src/test/scala</code> contains unit tests for the project. In order to run these tests in sbt, you can use the <code class="language-plaintext highlighter-rouge">test</code> command.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; test
+[info] ListsSuite:
+[info] - one plus one is two
+[info] - sum of a few numbers *** FAILED ***
+[info]   3 did not equal 2 (ListsSuite.scala:23)
+[info] - max of a few numbers
+[error] Failed: : Total 3, Failed 1, Errors 0, Passed 2, Skipped 0
+[error] Failed tests:
+[error]   example.ListsSuite
+[error] {file:/Users/luc/example/}assignment/test:test: Tests unsuccessful
+[error] Total time: 5 s, completed Aug 10, 2012 10:19:53 PM
+&gt; 
+</code></pre></div></div>
+
+<h2 id="running-your-code">Running your Code</h2>
+
+<p>If your project has an object with a <code class="language-plaintext highlighter-rouge">main</code> method (or an object extending the trait <code class="language-plaintext highlighter-rouge">App</code>), then you can run the code in sbt easily by typing <code class="language-plaintext highlighter-rouge">run</code>. In case sbt finds multiple main methods, it will ask you which one you’d like to execute.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; run
+Multiple main classes detected, select one to run:
+
+ [1] example.Lists
+ [2] example.M2
+
+Enter number: 1
+
+[info] Running example.Lists 
+main method!
+[success] Total time: 33 s, completed Aug 10, 2012 10:25:06 PM
+&gt;
+</code></pre></div></div>
+
+<h2 id="running-the-style-checker">Running the Style Checker</h2>
+
+<p>As part of the grading process, we run a style checker on the submitted source code to find common coding style issues. To make sure that your code conforms to all our style rules, you can run the style checker yourself before submitting. The sbt task <code class="language-plaintext highlighter-rouge">styleCheck</code> does exactly that.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; styleCheck
+[info] Checking file /Users/luc/Documents/epfl/teaching/progfun/assignments/src/main/scala/example/Lists.scala... OK!
+[info] Processed 1 file(s)
+[info] Found 0 errors
+[info] Found 0 warnings
+[info] Style Score: 100 out of 100
+[success] Total time: 1 s, completed Aug 10, 2012 11:34:02 PM
+&gt; 
+</code></pre></div></div>
+
+<h2 id="submitting-your-solution-to-coursera">Submitting your Solution to Coursera</h2>
+
+<p>The sbt task <code class="language-plaintext highlighter-rouge">submit</code> allows you to submit your solution for the assignment. It will pack your source code into a <code class="language-plaintext highlighter-rouge">.jar</code> file and upload it to the coursera servers. Note that the code can only be submitted if there are no compilation errors.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">submit</code> tasks takes two arguments: your e-mail address and the submission password. <strong>NOTE</strong>: the submission password is <strong>not your login password</strong>. Instead, it’s a special password generated by coursera. It is available on the <a href="../assignment/index">Assignments</a> page.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; submit e-mail@university.org suBmISsioNPasSwoRd
+[info] Packaging /Users/luc/example/target/scala-2.10.1/progfun-example_2.10.1-1.0.0-sources.jar ...
+[info] Done packaging.
+[info] Compiling 1 Scala source to /Users/luc/example/target/scala-2.10.1/classes...
+[info] Connecting to coursera. Obtaining challenge...
+[info] Computing challenge response...
+[info] Submitting solution...
+[success] Your code was successfully submitted: Your submission has been accepted and will be graded shortly.
+[success] Total time: 6 s, completed Aug 10, 2012 10:35:53 PM
+&gt; 
+</code></pre></div></div>
+
+
+  </body>
+</html>

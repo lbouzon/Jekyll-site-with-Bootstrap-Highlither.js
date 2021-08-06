@@ -1,0 +1,33 @@
+Site created using https://betterprogramming.pub/an-introduction-to-using-jekyll-with-bootstrap-4-6f2433afeda9 and https://highlightjs.org/
+
+
+Getting Started
+1 - Download Ruby. 
+
+2 - Install the Jekyll and Bundler gems and you are ready to build your first site:
+
+    >    gem install bundler jekyll
+
+
+***Create Site***
+
+'''
+jekyll new PROJECT_NAME --blank
+cd PROJECT_NAME
+bundle init
+'''
+
+Edit Gemfile and add
+
+'''
+gem "jekyll"
+'''
+
+run in therminal 
+
+> bundle 
+
+
+Start the server and your site is live!
+
+> jekyll serve --livereload
