@@ -6,14 +6,15 @@
     <title>{{ page.title }} - {{ site.title }}</title>
 
 
+
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
-    <script src="assets/css/highlight/highlight.min.js"></script>
+    <script src="{{"assets/css/highlight/highlight.min.js"| relative_url }}"></script>
     <script>hljs.highlightAll();</script>
-
-
+ 
   </head>
   <body>
     {% include navbar.html %} 
+   
     {{ content}}
   </body>
 </html>
