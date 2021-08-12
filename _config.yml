@@ -16,4 +16,8 @@ collections:
     output: true
   exercises:
     output: true
+
+
+permalink: /:categories/:title/
+
     
